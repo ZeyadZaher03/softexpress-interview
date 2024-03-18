@@ -8,7 +8,7 @@ interface List {
   label: string;
   id: number;
   selected: boolean;
-  value: string;
+  value: string | null;
 }
 
 interface FilterProps {
