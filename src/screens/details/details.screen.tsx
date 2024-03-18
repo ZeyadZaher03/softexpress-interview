@@ -32,6 +32,9 @@ interface DetailsProps {
   route: {
     params: DetailsNavigationParams;
   };
+  navigation: {
+    setOptions: (params: {title: string}) => {};
+  };
 }
 
 class Details extends Component<DetailsProps> {
@@ -40,6 +43,11 @@ class Details extends Component<DetailsProps> {
       console.error('Error opening website:', err),
     );
   };
+
+  componentDidMount(): void {
+    const {label} = this.props.route.params.recipe.item;
+    this.props.navigation.setOptions({title: label});
+  }
 
   render() {
     const recipe = this.props.route.params.recipe;
