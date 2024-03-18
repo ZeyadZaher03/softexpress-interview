@@ -75,7 +75,6 @@ export const searchByKeyword = async ({
   if (healthFilter?.toLowerCase()) {
     config.queryParams.health = healthFilter || '';
   }
-  console.log(config);
   const response = await apiRequest(config);
   return response;
 };
@@ -88,7 +87,6 @@ export const fetchRecipesForSearchPage = async ({
   onError,
 }: FetchRecipeProps) => {
   const data: Recipe[] = [];
-  console.log('STARTED FETCHING');
   try {
     const response = await searchByKeyword({
       keyword: string,
@@ -97,9 +95,6 @@ export const fetchRecipesForSearchPage = async ({
     });
     const responseData = response.data.hits;
     const more = response.data.more;
-    console.log(
-      `FETCHING, from ${response.data.from}, to ${response.data.to}, has more data? ${response.data.more} `,
-    );
     responseData.map((hit: any) => {
       const recipe = {
         label: hit.recipe.label,
