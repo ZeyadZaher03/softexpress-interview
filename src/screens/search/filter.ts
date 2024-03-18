@@ -1,7 +1,7 @@
 export const FILTERS_LIST = [
   {
     label: 'All',
-    value: 'all',
+    value: null,
     id: 0,
   },
   {
