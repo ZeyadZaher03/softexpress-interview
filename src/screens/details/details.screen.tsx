@@ -10,7 +10,7 @@ import {weighFormatter} from '../../utils/utils.ts';
 
 import {styles} from './details.screen.styles.js';
 
-interface RecipeItem {
+export interface Recipe {
   calories: number;
   image: string;
   label: string;
@@ -24,7 +24,7 @@ interface RecipeItem {
 interface DetailsNavigationParams {
   recipe: {
     index: number;
-    item: RecipeItem;
+    item: Recipe;
   };
 }
 

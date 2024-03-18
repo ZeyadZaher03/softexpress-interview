@@ -2,47 +2,28 @@ import React, {Component} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {fetchRecipesForSearchPage} from '../../api/api.ts';
-
 import RecipeCard from '../../components/recipe-card/recipe-card.component.tsx';
 import List from '../../components/list/list.component.tsx';
 import SearchInput from '../../components/search-input/search-input.component.tsx';
 import Filter from '../../components/filter/filter.component.tsx';
 import Heading from '../../components/heading/heading.component.tsx';
 import Text from '../../components/text/text.component.tsx';
+import LoadingIndicator from '../../components/loading-indicator/loading-indicator.component.tsx';
+
+import {fetchRecipesForSearchPage} from '../../api/api.ts';
+import {FILTERS_LIST} from './filter.ts';
+
+import {Recipe} from '../details/details.screen.tsx';
 
 import {styles} from './search.screen.styles.js';
 
-const FILTERS_LIST = [
-  {
-    label: 'All',
-    value: 'all',
-    id: 0,
-  },
-  {
-    label: 'low sugar',
-    value: 'low-sugar',
-    id: 1,
-  },
-  {
-    label: 'keto',
-    value: 'keto-friendly',
-    id: 2,
-  },
-  {
-    label: 'vegan',
-    value: 'vegan',
-    id: 3,
-  },
-];
-
-interface SearchProps {
+export interface SearchScreenProps {
   navigation: {
     navigate: (screenName: string, params: any) => void;
   };
 }
 
-interface SearchState {
+interface SearchScreenState {
   searchText: string;
   healthFilter: string;
   recipesResults: any;
@@ -53,13 +34,6 @@ interface SearchState {
   loading: boolean;
 }
 
-interface Recipe {
-  label: string;
-  source: string;
-  image: string;
-  uri: string;
-}
-
 interface MetaParams {
   to: number;
   init?: boolean;
@@ -67,15 +41,15 @@ interface MetaParams {
   hasMore?: boolean;
 }
 
-class Search extends Component<SearchProps, SearchState> {
+class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
   debounceTimer: null | ReturnType<typeof setTimeout>;
-  constructor(props: SearchProps) {
+  constructor(props: SearchScreenProps) {
     super(props);
     this.state = {
       searchText: '',
       from: 0,
       to: 0,
-      healthFilter: FILTERS_LIST[0].value, // All
+      healthFilter: FILTERS_LIST[0].value,
       recipesResults: [],
       loading: false,
       shouldFetchMore: false,
@@ -88,11 +62,7 @@ class Search extends Component<SearchProps, SearchState> {
     const {searchText, recipesResults, shouldFetchMore, healthFilter} =
       this.state;
     const string = searchText.trim().toLowerCase();
-    if (!string) return;
-    if (!shouldFetchMore && !init) {
-      return;
-    }
-
+    if (!string || (!shouldFetchMore && !init)) return;
     try {
       const {data, more} = await fetchRecipesForSearchPage({
         string,
@@ -127,7 +97,6 @@ class Search extends Component<SearchProps, SearchState> {
       error: '',
       loading: true,
     });
-
     const cleanText = text.trim().toLowerCase();
     if (!cleanText) {
       this.setState({
@@ -167,11 +136,10 @@ class Search extends Component<SearchProps, SearchState> {
   };
 
   renderItem = (item: {index: number; item: Recipe}) => {
+    const {navigation} = this.props;
     return (
       <RecipeCard
-        onPress={() =>
-          console.log(this.props.navigation.navigate('Details', {recipe: item}))
-        }
+        onPress={() => navigation.navigate('Details', {recipe: item})}
         key={item.item.image}
         customStyles={styles.recipeCard}
         imgSrc={item.item.image}
@@ -211,11 +179,10 @@ class Search extends Component<SearchProps, SearchState> {
 
   renderListEmpty = () => {
     const {searchText, loading} = this.state;
-
     if (loading) {
       return (
         <View style={styles.emptyWrapper}>
-          <Text customStyles={styles.emptyText}>loading...</Text>
+          <LoadingIndicator />
         </View>
       );
     }
@@ -261,4 +228,4 @@ class Search extends Component<SearchProps, SearchState> {
   }
 }
 
-export default Search;
+export default SearchScreen;
