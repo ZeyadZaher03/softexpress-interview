@@ -1,6 +1,6 @@
 // Presentational Component
 
-import React, {Component, ReactElement} from 'react';
+import React, {PureComponent, ReactElement} from 'react';
 import {styles} from './card.styles';
 import {TouchableOpacity, ViewStyle} from 'react-native';
 
@@ -10,7 +10,7 @@ interface CardProps {
   onPress?: () => void;
 }
 
-class Card extends Component<CardProps> {
+class Card extends PureComponent<CardProps> {
   render() {
     const {customStyle, children, onPress} = this.props;
     return (
