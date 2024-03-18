@@ -28,7 +28,7 @@ interface CB {
 
 interface FetchRecipeProps {
   string: string;
-  healthFilter: string;
+  healthFilter: string | null;
   callback?: ({data, more}: CB) => void;
   onError?: (error: any) => void;
   params: {
