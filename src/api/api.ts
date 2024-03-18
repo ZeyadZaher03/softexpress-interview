@@ -72,7 +72,7 @@ export const searchByKeyword = async ({
     from: params.from,
     to: params.to,
   };
-  if (healthFilter?.toLocaleLowerCase() !== 'all') {
+  if (healthFilter?.toLowerCase()) {
     config.queryParams.health = healthFilter || '';
   }
   console.log(config);
