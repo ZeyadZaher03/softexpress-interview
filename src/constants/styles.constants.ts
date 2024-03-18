@@ -1,5 +1,6 @@
-export const color_primary = '';
+export const color_primary = '#F3BE36';
 export const color_secondary = '';
+export const color_primary_text = '#A37B17';
 
 export const color_app_background = '#fff';
 
