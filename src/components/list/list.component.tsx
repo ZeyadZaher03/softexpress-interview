@@ -48,7 +48,6 @@ class List extends Component<ListProps, ListState> {
   }
 
   onEndReached = () => {
-    console.log('END REACHED');
     const {hasScrolled} = this.state;
     if (!hasScrolled) return;
 

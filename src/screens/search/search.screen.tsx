@@ -89,7 +89,6 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
         loading: false,
       });
     } catch (error: any) {
-      console.error(error.message);
       this.setState({
         error: error.message,
       });
