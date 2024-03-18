@@ -1,12 +1,18 @@
 // Presentational Component
 
-import React, {Component} from 'react';
+import React, {Component, ReactElement} from 'react';
 import {Text as RNText, TextStyle} from 'react-native';
 
 import {styles} from './text.component.styles.js';
 
 interface TextProps {
-  children: string;
+  children:
+    | string
+    | string[]
+    | number
+    | number[]
+    | (string | number)[]
+    | ReactElement;
   customStyles?: TextStyle;
   fontSize?: number;
   color?: string;
