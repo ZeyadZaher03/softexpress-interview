@@ -25,7 +25,7 @@ export interface SearchScreenProps {
 
 interface SearchScreenState {
   searchText: string;
-  healthFilter: string;
+  healthFilter: string | null;
   recipesResults: any;
   from: number;
   to: number;
@@ -34,11 +34,12 @@ interface SearchScreenState {
   loading: boolean;
 }
 
-interface MetaParams {
+export interface FetchRecipesParams {
   to: number;
   init?: boolean;
   from: number;
-  hasMore?: boolean;
+  healthFilter?: string | null;
+  keyword?: string;
 }
 
 class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
@@ -58,23 +59,29 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
     this.debounceTimer = null;
   }
 
-  fetchRecipes = async ({to, from, init}: MetaParams) => {
-    const {searchText, recipesResults, shouldFetchMore, healthFilter} =
-      this.state;
-    const string = searchText.trim().toLowerCase();
-    if (!string || (!shouldFetchMore && !init)) return;
+  fetchRecipes = async ({
+    to,
+    from,
+    init,
+    healthFilter,
+    keyword,
+  }: FetchRecipesParams) => {
+    const {recipesResults, shouldFetchMore} = this.state;
+    const params = {
+      string: keyword || this.state.searchText,
+      healthFilter: healthFilter || this.state.healthFilter,
+      params: {
+        to,
+        from,
+      },
+    };
+
+    this.setState({loading: true});
+
+    if (!keyword || (!shouldFetchMore && !init)) return;
     try {
-      const {data, more} = await fetchRecipesForSearchPage({
-        string,
-        healthFilter,
-        params: {
-          to,
-          from,
-        },
-      });
-
+      const {data, more} = await fetchRecipesForSearchPage(params);
       const newRecipesData = init ? data : [...recipesResults, ...data];
-
       this.setState({
         recipesResults: newRecipesData,
         to,
@@ -91,13 +98,17 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
   };
 
   onSearchChange = (text: string) => {
+    const {healthFilter} = this.state;
+
     this.setState({
       searchText: text,
       shouldFetchMore: false,
       error: '',
       loading: true,
     });
+
     const cleanText = text.trim().toLowerCase();
+
     if (!cleanText) {
       this.setState({
         recipesResults: [],
@@ -116,6 +127,8 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
           to: 9,
           from: 0,
           init: true,
+          healthFilter: healthFilter || '',
+          keyword: cleanText,
         }),
       1000,
     );
@@ -125,12 +138,25 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
     selected: boolean;
     id: number;
     label: string;
-    value: string;
+    value: string | null;
   }) => {
+    const {searchText} = this.state;
+    const cleanText = searchText.trim().toLowerCase();
     this.setState(
-      {error: '', healthFilter: clickedItem.value, shouldFetchMore: false},
+      {
+        error: '',
+        healthFilter: clickedItem.value,
+        shouldFetchMore: false,
+        recipesResults: [],
+      },
       () => {
-        this.fetchRecipes({from: 0, to: 9, init: true});
+        this.fetchRecipes({
+          from: 0,
+          to: 9,
+          init: true,
+          keyword: cleanText,
+          healthFilter: clickedItem.value,
+        });
       },
     );
   };
@@ -180,11 +206,7 @@ class SearchScreen extends Component<SearchScreenProps, SearchScreenState> {
   renderListEmpty = () => {
     const {searchText, loading} = this.state;
     if (loading) {
-      return (
-        <View style={styles.emptyWrapper}>
-          <LoadingIndicator />
-        </View>
-      );
+      return <></>;
     }
     if (!searchText) {
       return (
