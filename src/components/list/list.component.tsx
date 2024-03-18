@@ -1,7 +1,7 @@
 import React, {Component, ReactElement} from 'react';
-import {ActivityIndicator, FlatList, View, ViewStyle} from 'react-native';
+import {FlatList, View, ViewStyle} from 'react-native';
 import {styles} from './list.styles';
-import {color_black} from '../../constants/styles.constants';
+import LoadingIndicator from '../loading-indicator/loading-indicator.component';
 
 interface ListState {
   hasScrolled: boolean;
@@ -51,6 +51,7 @@ class List extends Component<ListProps, ListState> {
     console.log('END REACHED');
     const {hasScrolled} = this.state;
     if (!hasScrolled) return;
+
     this.setState({hasScrolled: false}, () => this.fetchMore());
   };
 
@@ -58,8 +59,8 @@ class List extends Component<ListProps, ListState> {
     const {loading} = this.props;
     if (loading) {
       return (
-        <View>
-          <ActivityIndicator color={color_black} />
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <LoadingIndicator />
         </View>
       );
     }
@@ -82,7 +83,7 @@ class List extends Component<ListProps, ListState> {
           data={data}
           renderItem={renderItem}
           onEndReached={() => this.onEndReached()}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={2}
           onScrollBeginDrag={this.onScroll}
           ListHeaderComponent={listHeaderComponent}
           showsHorizontalScrollIndicator={false}
@@ -90,6 +91,7 @@ class List extends Component<ListProps, ListState> {
           contentContainerStyle={listStyles}
           initialNumToRender={10}
           keyExtractor={keyExtractor}
+          ListFooterComponent={this.renderSpinner()}
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
