@@ -1,4 +1,13 @@
 module.exports = {
-  root: true,
-  extends: '@react-native',
+  extends: 'google',
+  quotes: [2, 'single'],
+  globals: {
+    SwaggerEditor: false,
+  },
+  env: {
+    browser: true,
+  },
+  rules: {
+    'linebreak-style': 0,
+  },
 };
