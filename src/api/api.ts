@@ -92,7 +92,7 @@ export const fetchRecipesForSearchPage = async ({
   try {
     const response = await searchByKeyword({
       keyword: string,
-      healthFilter,
+      healthFilter: healthFilter || null || undefined,
       params,
     });
     const responseData = response.data.hits;
