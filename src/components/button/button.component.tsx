@@ -7,7 +7,7 @@ interface ButtonProps {
   children: string;
   customStyle?: ViewStyle;
   customTextStyle?: TextStyle;
-  onPress?: () => {};
+  onPress?: () => void;
 }
 
 class Button extends Component<ButtonProps> {
