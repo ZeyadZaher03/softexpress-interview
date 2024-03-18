@@ -8,10 +8,10 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     shadowColor: '#959da5',
-    shadowOffset: {width: 0, height: 8},
+    shadowOffset: {width: 0, height: 0},
     shadowRadius: 24,
-    shadowOpacity: 0.15,
-    elevation: 3,
+    shadowOpacity: 0.1,
+    elevation: 5,
     overflow: 'hidden',
   },
   textInput: {
