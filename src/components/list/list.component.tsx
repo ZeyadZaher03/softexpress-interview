@@ -1,6 +1,7 @@
 import React, {Component, ReactElement} from 'react';
 import {ActivityIndicator, FlatList, View, ViewStyle} from 'react-native';
 import {styles} from './list.styles';
+import {color_black} from '../../constants/styles.constants';
 
 interface ListState {
   hasScrolled: boolean;
@@ -22,14 +23,8 @@ interface ListProps {
     to: number;
   };
   listStyles?: ViewStyle;
-  // containerStyles: ViewStyle;
-  // horizontal: boolean;
-  // listEmptyComponent: ReactElement;
-  // initialNumToRender: number;
+  listEmptyComponent: ReactElement;
   keyExtractor: ((item: never, index: number) => string) | undefined;
-  // refreshing: boolean;
-  // loading: boolean;
-  // onRefresh: () => void;
 }
 
 class List extends Component<ListProps, ListState> {
@@ -59,22 +54,17 @@ class List extends Component<ListProps, ListState> {
     this.setState({hasScrolled: false}, () => this.fetchMore());
   };
 
-  // onRefreshList = () => {
-  //   const {onRefresh} = this.props;
-  //   onRefresh();
-  // };
-
-  // renderSpinner = () => {
-  //   const {loading, refreshing} = this.props;
-  //   if (loading && !refreshing) {
-  //     return (
-  //       <View>
-  //         <ActivityIndicator color={'red'} />
-  //       </View>
-  //     );
-  //   }
-  //   return null;
-  // };
+  renderSpinner = () => {
+    const {loading} = this.props;
+    if (loading) {
+      return (
+        <View>
+          <ActivityIndicator color={color_black} />
+        </View>
+      );
+    }
+    return null;
+  };
 
   render() {
     const {
@@ -83,12 +73,7 @@ class List extends Component<ListProps, ListState> {
       listHeaderComponent,
       listStyles,
       keyExtractor,
-      // loading,
-      // initialNumToRender,
-      // containerStyles,
-      // listStyles,
-      // listEmptyComponent,
-      // horizontal,
+      listEmptyComponent,
     } = this.props;
 
     return (
@@ -102,16 +87,10 @@ class List extends Component<ListProps, ListState> {
           ListHeaderComponent={listHeaderComponent}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          // style={listStyles}
           contentContainerStyle={listStyles}
-          // style={}
-          // horizontal={horizontal || false}
-          // style={listStyles}
-          // initialNumToRender={initialNumToRender || 10}
+          initialNumToRender={10}
           keyExtractor={keyExtractor}
-          // onRefresh={() => this.onRefreshList()}
-          // refreshing={false}
-          // ListEmptyComponent={listEmptyComponent}
+          ListEmptyComponent={listEmptyComponent}
         />
       </View>
     );
