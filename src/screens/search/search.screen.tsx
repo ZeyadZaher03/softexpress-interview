@@ -8,7 +8,6 @@ import SearchInput from '../../components/search-input/search-input.component.ts
 import Filter from '../../components/filter/filter.component.tsx';
 import Heading from '../../components/heading/heading.component.tsx';
 import Text from '../../components/text/text.component.tsx';
-import LoadingIndicator from '../../components/loading-indicator/loading-indicator.component.tsx';
 
 import {fetchRecipesForSearchPage} from '../../api/api.ts';
 import {FILTERS_LIST} from './filter.ts';
